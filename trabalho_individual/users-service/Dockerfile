@@ -1,13 +1,11 @@
 FROM node:14
 
-WORKDIR /chatservice
-
-COPY package*.json ./
-
-RUN npm install
+WORKDIR /userservice
 
 COPY . .
 
-EXPOSE 7101
+RUN yarn
 
-CMD [ "node", "server.js" ]
+CMD yarn watch
+
+EXPOSE 7101

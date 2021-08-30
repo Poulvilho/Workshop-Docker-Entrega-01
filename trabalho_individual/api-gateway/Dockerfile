@@ -2,12 +2,10 @@ FROM node:14
 
 WORKDIR /chatservice
 
-COPY package*.json ./
-
-RUN npm install
-
 COPY . .
 
-EXPOSE 7000
+RUN yarn
 
-CMD [ "node", "server.js" ]
+CMD yarn watch
+
+EXPOSE 7000

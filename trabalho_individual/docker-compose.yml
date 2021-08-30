@@ -31,7 +31,7 @@ services:
     container_name: docker_paulo_userservice
     build:
       context: .
-      dockerfile: ./user-service/Dockerfile
+      dockerfile: ./users-service/Dockerfile
     volumes:
       - ".:/userservice"
       - "/userservice/node_modules"
@@ -44,7 +44,7 @@ services:
     container_name: docker_paulo_apigateway
     build:
       context: .
-      dockerfile: ./apigateway/Dockerfile
+      dockerfile: ./api-gateway/Dockerfile
     volumes:
       - ".:/apigateway"
       - "/apigateway/node_modules"
