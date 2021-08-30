@@ -1,0 +1,70 @@
+version: "3.7"
+services:
+  db:
+    image: mariadb:10.3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: notSecureChangeMe
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_USER_CONFIG_BASE64= ./phpmyadmin/config.user.inc.php
+
+  chatservice:
+    container_name: docker_paulo_chatservice
+    build:
+      context: .
+      dockerfile: ./chat-service/Dockerfile
+    volumes:
+      - ".:/chatservice"
+      - "/chatservice/node_modules"
+    ports:
+      - "7100:7100"
+    depends_on:
+      - db
+
+  userservice:
+    container_name: docker_paulo_userservice
+    build:
+      context: .
+      dockerfile: ./user-service/Dockerfile
+    volumes:
+      - ".:/userservice"
+      - "/userservice/node_modules"
+    ports:
+      - "7101:7101"
+    depends_on:
+      - db
+
+  apigateway:
+    container_name: docker_paulo_apigateway
+    build:
+      context: .
+      dockerfile: ./apigateway/Dockerfile
+    volumes:
+      - ".:/apigateway"
+      - "/apigateway/node_modules"
+    ports:
+      - "7000:7000"
+    depends_on:
+      - db
+
+  app:
+    container_name: docker_paulo
+    build:
+      context: .
+      dockerfile: ./chat-app/Dockerfile
+    volumes:
+      - ".:/chatapp"
+      - "/chatapp/node_modules"
+    ports:
+      - "7001:7001"
+
+    depends_on:
+      - chatservice
+      - userservice
+      - apigateway
